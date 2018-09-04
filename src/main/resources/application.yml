@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: ev-charging-api
+  # Mongo
+  data:
+    mongodb:
+      database: dbCPoint
+      port: 27017
+      host: localhost
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+
