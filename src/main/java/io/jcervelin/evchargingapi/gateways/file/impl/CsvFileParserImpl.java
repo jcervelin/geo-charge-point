@@ -2,6 +2,7 @@ package io.jcervelin.evchargingapi.gateways.file.impl;
 
 import io.jcervelin.evchargingapi.domains.ChargePoint;
 import io.jcervelin.evchargingapi.domains.ReadResponse;
+import io.jcervelin.evchargingapi.domains.exceptions.UnprocessableEntityException;
 import io.jcervelin.evchargingapi.gateways.file.FileParser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -39,14 +40,14 @@ public class CsvFileParserImpl implements FileParser {
                     .build();
         } catch (final Throwable e) {
             log.error("Error reading csv file.", e.getMessage());
-            throw new RuntimeException();
+            throw new UnprocessableEntityException("Invalid multipartFile file.");
         }
     }
 
     private ChargePoint convertRecordToChargePoint (String line, Collection<String> errors) {
         try {
             final String[] split = line.split(COMMA);
-            ChargePoint chargePoint = new ChargePoint();
+            final ChargePoint chargePoint = new ChargePoint();
             if(StringUtils.isNoneEmpty(split[0]))
                 chargePoint.setChargeDeviceID(split[0]);
             else throw new RuntimeException();
@@ -66,6 +67,5 @@ public class CsvFileParserImpl implements FileParser {
             return null;
         }
     }
-
 
 }
