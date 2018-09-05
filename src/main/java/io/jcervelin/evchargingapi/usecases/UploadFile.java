@@ -21,11 +21,11 @@ public class UploadFile {
 
     public Collection<String> uploadFile(final MultipartFile multipartFile) {
         final ReadResponse read = fileParserGateway.read(multipartFile);
-        if(read.getErrors().size() == 0)
-            read.getErrors().add("All lines were successfully saved.");
+        if(read.getMsgs().size() == 0)
+            read.getMsgs().add("All lines were successfully saved.");
         if (CollectionUtils.emptyIfNull(read.getChargePoints()).size() == 0)
-            throw new UnprocessableEntityException("No messages have been saved.",read.getErrors());
+            throw new UnprocessableEntityException("No messages have been saved.",read.getMsgs());
         repository.save(read.getChargePoints());
-        return read.getErrors();
+        return read.getMsgs();
     }
 }

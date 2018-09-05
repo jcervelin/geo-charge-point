@@ -38,8 +38,8 @@ public class CsvFileImplTest extends UnitTestSupport {
         // THEN
         assertThat(resultList.getChargePoints().size()).isEqualTo(6);
         assertThat(resultList.getChargePoints()).containsExactlyInAnyOrderElementsOf(chargePointsExpected);
-        assertThat(resultList.getErrors().size()).isEqualTo(6);
-        resultList.getErrors().forEach(error -> assertThat(error).startsWith("Error read csv line:"));
+        assertThat(resultList.getMsgs().size()).isEqualTo(6);
+        resultList.getMsgs().forEach(error -> assertThat(error).startsWith("Error read csv line:"));
     }
 
     @Test
@@ -54,8 +54,8 @@ public class CsvFileImplTest extends UnitTestSupport {
 
         // THEN
         assertThat(resultList.getChargePoints().size()).isEqualTo(0);
-        assertThat(resultList.getErrors().size()).isEqualTo(6);
-        resultList.getErrors().forEach(error -> assertThat(error).startsWith("Error read csv line:"));
+        assertThat(resultList.getMsgs().size()).isEqualTo(6);
+        resultList.getMsgs().forEach(error -> assertThat(error).startsWith("Error read csv line:"));
     }
 
     @Test
@@ -70,7 +70,7 @@ public class CsvFileImplTest extends UnitTestSupport {
 
         // THEN
         assertThat(resultList.getChargePoints().size()).isEqualTo(0);
-        assertThat(resultList.getErrors().size()).isEqualTo(0);
+        assertThat(resultList.getMsgs().size()).isEqualTo(0);
     }
 
     @Test

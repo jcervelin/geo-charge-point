@@ -154,7 +154,7 @@ public class ChargePointControllerIT {
     }
 
     @Test
-    public void updateChargePointsShouldReturn6ErrorsAndNoDataHaveBeenSaved() throws Exception {
+    public void updateChargePointsShouldReturn6ErrorsWithStatus422AndNoDataHaveBeenSaved() throws Exception {
 
         // GIVEN
         final Collection<String> errorsExpected = Arrays.asList(

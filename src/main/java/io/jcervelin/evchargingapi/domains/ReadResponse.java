@@ -9,5 +9,5 @@ import java.util.Collection;
 @Builder
 public class ReadResponse {
     private Collection<ChargePoint> chargePoints;
-    private Collection<String> errors;
+    private Collection<String> msgs;
 }
