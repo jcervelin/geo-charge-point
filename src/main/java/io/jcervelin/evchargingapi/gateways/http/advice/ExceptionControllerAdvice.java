@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.ArrayList;
+
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
@@ -41,6 +43,8 @@ public class ExceptionControllerAdvice {
         log.info("handleException", exception);
         final ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(httpStatus);
+        errorResponse.setErrors(new ArrayList<>());
+        errorResponse.getErrors().add(exception.getMessage());
         exception.getErrors().forEach(errorResponse::addError);
         return new ResponseEntity<>(errorResponse, httpStatus);
     }

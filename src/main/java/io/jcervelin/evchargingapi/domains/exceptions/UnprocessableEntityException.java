@@ -1,23 +1,22 @@
 package io.jcervelin.evchargingapi.domains.exceptions;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.Collection;
 
-@Getter
+@Data
+@AllArgsConstructor
 public class UnprocessableEntityException extends RuntimeException {
 
-    public UnprocessableEntityException(final String message, Collection<String> errors) {
-        super(message);
-    }
+    private String message;
+    private Collection<String> errors;
 
     public UnprocessableEntityException(final String message) {
         super(message);
+        this.message = message;
     }
 
     private static final long serialVersionUID = 1L;
-
-
-    private Collection<String> errors;
 
 }

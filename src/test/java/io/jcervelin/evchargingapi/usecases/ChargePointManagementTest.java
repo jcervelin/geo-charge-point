@@ -8,13 +8,11 @@ import org.junit.Test;
 import org.mockito.*;
 import org.springframework.data.geo.Point;
 
-import java.util.Collection;
 import java.util.List;
 
 import static br.com.six2six.fixturefactory.Fixture.from;
-import static io.jcervelin.evchargingapi.templates.ChargePointTemplate.*;
-import static io.jcervelin.evchargingapi.templates.ChargePointTemplate.BIRKDALE_PRIMARY_SCHOOL;
-import static io.jcervelin.evchargingapi.templates.ChargePointTemplate.LONGWELL_GREEN_LEISURE_CENTRE;
+import static io.jcervelin.evchargingapi.templates.ChargePointTemplate.CHELTENHAM_CHASE_HOTEL;
+import static io.jcervelin.evchargingapi.templates.ChargePointTemplate.POOLE_CIVIC_CENTRE_SURFACE_CAR_PARK;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
