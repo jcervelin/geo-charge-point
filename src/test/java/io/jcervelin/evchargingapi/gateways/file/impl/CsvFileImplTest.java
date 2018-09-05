@@ -3,14 +3,9 @@ package io.jcervelin.evchargingapi.gateways.file.impl;
 import io.jcervelin.evchargingapi.domains.ChargePoint;
 import io.jcervelin.evchargingapi.domains.ReadResponse;
 import io.jcervelin.evchargingapi.domains.exceptions.UnprocessableEntityException;
-import org.junit.BeforeClass;
-import org.junit.Rule;
+import io.jcervelin.evchargingapi.support.UnitTestSupport;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
@@ -18,22 +13,10 @@ import java.io.InputStream;
 import java.util.Collection;
 
 import static br.com.six2six.fixturefactory.Fixture.from;
-import static br.com.six2six.fixturefactory.loader.FixtureFactoryLoader.loadTemplates;
 import static io.jcervelin.evchargingapi.templates.ChargePointTemplate.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CsvFileImplTest {
-
-    private static final String TEMPLATE_PACKAGE = "io.jcervelin.evchargingapi.templates";
-
-    @Rule
-    public final ExpectedException thrown = ExpectedException.none();
-
-    @BeforeClass
-    public static void setup() {
-        loadTemplates(TEMPLATE_PACKAGE);
-    }
+public class CsvFileImplTest extends UnitTestSupport {
 
     @InjectMocks
     private CsvFileParserImpl target;
