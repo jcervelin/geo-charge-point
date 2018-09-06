@@ -1,7 +1,9 @@
 package io.jcervelin.evchargingapi.gateways.http.advice;
 
 import io.jcervelin.evchargingapi.domains.api.ErrorResponse;
+import io.jcervelin.evchargingapi.domains.exceptions.NoChargePointFoundException;
 import io.jcervelin.evchargingapi.domains.exceptions.UnprocessableEntityException;
+import io.jcervelin.evchargingapi.domains.exceptions.WrongChargingPointFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,8 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,7 +28,17 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler(UnprocessableEntityException.class)
-    public ResponseEntity<ErrorResponse> noContentFound(final UnprocessableEntityException exception) {
+    public ResponseEntity<ErrorResponse> unprocessable(final UnprocessableEntityException exception) {
+        return createMessage(exception, UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(NoChargePointFoundException.class)
+    public ResponseEntity<ErrorResponse> noContentFound(final NoChargePointFoundException exception) {
+        return createMessage(exception, NO_CONTENT);
+    }
+
+    @ExceptionHandler(WrongChargingPointFoundException.class)
+    public ResponseEntity<ErrorResponse> wrongChargePointFound(final WrongChargingPointFoundException exception) {
         return createMessage(exception, UNPROCESSABLE_ENTITY);
     }
 

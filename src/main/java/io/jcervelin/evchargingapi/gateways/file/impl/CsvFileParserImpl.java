@@ -36,7 +36,7 @@ public class CsvFileParserImpl implements FileParser {
                     .collect(toSet());
             return ReadResponse.builder()
                     .chargePoints(collect)
-                    .errors(errors)
+                    .msgs(errors)
                     .build();
         } catch (final Throwable e) {
             log.error("Error reading csv file.", e.getMessage());

@@ -7,7 +7,6 @@ import io.jcervelin.evchargingapi.gateways.file.FileParser;
 import io.jcervelin.evchargingapi.gateways.mongo.ChargePointRepositoryCustom;
 import io.jcervelin.evchargingapi.support.UnitTestSupport;
 import org.assertj.core.api.Assertions;
-import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -56,7 +55,7 @@ public class UploadFileTest extends UnitTestSupport {
 
         final ReadResponse readResponseExpected = ReadResponse.builder()
                 .chargePoints(chargePointsExpected)
-                .errors(errorsExpected)
+                .msgs(errorsExpected)
                 .build();
 
         final InputStream inputStream = getClass().getResourceAsStream("/national-charge-point-registry-with-errors.csv");
@@ -88,7 +87,7 @@ public class UploadFileTest extends UnitTestSupport {
 
         final ReadResponse readResponseExpected = ReadResponse.builder()
                 .chargePoints(chargePointsExpected)
-                .errors(errorsExpected)
+                .msgs(errorsExpected)
                 .build();
 
         final InputStream inputStream = getClass().getResourceAsStream("/national-charge-point-registry-with-success.csv");
@@ -124,7 +123,7 @@ public class UploadFileTest extends UnitTestSupport {
 
         final ReadResponse readResponseExpected = ReadResponse.builder()
                 .chargePoints(null)
-                .errors(errorsExpected)
+                .msgs(errorsExpected)
                 .build();
 
         final InputStream inputStream = getClass().getResourceAsStream("/national-charge-point-registry-with-errors-only.csv");

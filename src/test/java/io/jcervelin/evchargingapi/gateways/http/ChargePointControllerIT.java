@@ -5,14 +5,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jcervelin.evchargingapi.EvChargingApiApplication;
 import io.jcervelin.evchargingapi.domains.ChargePoint;
 import io.jcervelin.evchargingapi.domains.api.ErrorResponse;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,6 +36,7 @@ import static io.jcervelin.evchargingapi.domains.Endpoints.CHARGE_POINTS;
 import static io.jcervelin.evchargingapi.domains.Endpoints.UPLOAD_CSV;
 import static io.jcervelin.evchargingapi.templates.ChargePointTemplate.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -193,5 +197,82 @@ public class ChargePointControllerIT {
         final List<ChargePoint> chargePointsSaved = mongoTemplate.findAll(ChargePoint.class);
 
         assertThat(chargePointsSaved).isEmpty();
+    }
+
+    @Test
+    public void updateShouldChange() throws Exception {
+        final Collection<ChargePoint> chargePointsExpected = from(ChargePoint.class)
+                .gimme(9, SAINSBURY_S_LEICESTER_NORTH_1,SAINSBURY_S_LEICESTER_NORTH_2,SAINSBURY_S_LEICESTER_NORTH_3,CHELTENHAM_CHASE_HOTEL, POOLE_CIVIC_CENTRE_SURFACE_CAR_PARK, CROSBY_LAKESIDE_ADVENTURE_CENTRE
+                        ,WEBBS_OF_WYCHBOLD_RAPID_CHARGER,LONGWELL_GREEN_LEISURE_CENTRE,BIRKDALE_PRIMARY_SCHOOL);
+
+        chargePointsExpected.forEach(mongoTemplate::save);
+
+        final ChargePoint chargePointChanged = from(ChargePoint.class)
+                .gimme(SAINSBURY_S_LEICESTER_NORTH_1);
+
+        chargePointChanged.setName("Sainsbury's Leicester 10");
+        chargePointChanged.setLocation(new Point(chargePointChanged.getLocation().getX() + 1.0, chargePointChanged.getLocation().getX() + 1.0));
+
+        final MvcResult mvcResult = mockMvc.perform(put(CHARGE_POINTS)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(chargePointChanged)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        final String content = mvcResult.getResponse().getContentAsString();
+
+        final ChargePoint result = objectMapper.readValue(content, ChargePoint.class);
+
+        Assertions.assertThat(result).isNotNull();
+
+        final ChargePoint found = mongoTemplate.findById(result.getChargeDeviceID(), ChargePoint.class);
+
+        Assertions.assertThat(chargePointChanged).isEqualToComparingFieldByField(found);
+    }
+
+    @Test
+    public void updateShouldNotFindNothing() throws Exception {
+
+        final ChargePoint chargePointChanged = from(ChargePoint.class)
+                .gimme(SAINSBURY_S_LEICESTER_NORTH_1);
+
+        final MvcResult mvcResult = mockMvc.perform(put(CHARGE_POINTS)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(chargePointChanged)))
+                .andExpect(status().isNoContent())
+                .andReturn();
+
+        final String content = mvcResult.getResponse().getContentAsString();
+
+
+        Assertions.assertThat(content).isEqualToIgnoringWhitespace("{\"status\":\"NO_CONTENT\",\"errors\":[\"No Charge Point Found.\"]}");
+    }
+
+    @Test
+    public void updateShouldTryToRecordAnLocationThatExistsAlready() throws Exception {
+
+        final Collection<ChargePoint> chargePointsExpected = from(ChargePoint.class)
+                .gimme(9, SAINSBURY_S_LEICESTER_NORTH_1,SAINSBURY_S_LEICESTER_NORTH_2,SAINSBURY_S_LEICESTER_NORTH_3,CHELTENHAM_CHASE_HOTEL, POOLE_CIVIC_CENTRE_SURFACE_CAR_PARK, CROSBY_LAKESIDE_ADVENTURE_CENTRE
+                        ,WEBBS_OF_WYCHBOLD_RAPID_CHARGER,LONGWELL_GREEN_LEISURE_CENTRE,BIRKDALE_PRIMARY_SCHOOL);
+
+        chargePointsExpected.forEach(mongoTemplate::save);
+
+        final ChargePoint chargePointChanged = from(ChargePoint.class)
+                .gimme(SAINSBURY_S_LEICESTER_NORTH_1);
+
+        final ChargePoint chargePointLongWell = from(ChargePoint.class)
+                .gimme(LONGWELL_GREEN_LEISURE_CENTRE);
+
+        chargePointChanged.setLocation(chargePointLongWell.getLocation());
+
+        final MvcResult mvcResult = mockMvc.perform(put(CHARGE_POINTS)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(chargePointChanged)))
+                .andExpect(status().isUnprocessableEntity())
+                .andReturn();
+
+        final String content = mvcResult.getResponse().getContentAsString();
+
+        Assertions.assertThat(content).isEqualToIgnoringWhitespace("{\"status\":\"UNPROCESSABLE_ENTITY\",\"errors\":[\"There is another Charge Point at this place\"]}");
     }
 }

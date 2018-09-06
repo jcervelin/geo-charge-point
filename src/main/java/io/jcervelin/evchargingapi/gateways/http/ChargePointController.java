@@ -16,6 +16,7 @@ import java.util.List;
 import static io.jcervelin.evchargingapi.domains.Endpoints.CHARGE_POINTS;
 import static io.jcervelin.evchargingapi.domains.Endpoints.UPLOAD_CSV;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -29,6 +30,7 @@ public class ChargePointController {
     private UploadFile uploadFile;
 
     @GetMapping
+    @ResponseStatus(OK)
     @ApiOperation(value = "Given latitude and longitude, find the near 'n' charge points")
     public List<ChargePoint> findChargePoint(@RequestParam double latitude,
                                              @RequestParam double longitude,
@@ -42,4 +44,13 @@ public class ChargePointController {
     public Collection<String> updateChargePoints(@RequestParam("file") final MultipartFile multipartFile) {
         return uploadFile.uploadFile(multipartFile);
     }
+
+    @PutMapping
+    @ResponseStatus(CREATED)
+    @ApiOperation(value = "Update a Charge Point")
+    public ChargePoint update(@RequestBody ChargePoint chargePoint) {
+        return chargePointManagement.update(chargePoint);
+    }
+
+
 }

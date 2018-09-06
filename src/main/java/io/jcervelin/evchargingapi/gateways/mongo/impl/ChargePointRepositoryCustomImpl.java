@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,9 +28,25 @@ public class ChargePointRepositoryCustomImpl implements ChargePointRepositoryCus
 
         return template.find(query, ChargePoint.class);
     }
+
+    @Override
+    public Optional<ChargePoint> findByLocation(Point location) {
+        return repository.findByLocation(location);
+    }
+
+    @Override
+    public Optional<ChargePoint> findById(String id) {
+        return repository.findById(id);
+    }
+
     @Override
     public void save(Collection<ChargePoint> chargePointStream) {
         repository.saveAll(chargePointStream);
+    }
+
+    @Override
+    public ChargePoint save(ChargePoint chargePoint) {
+        return repository.save(chargePoint);
     }
 
 }

@@ -18,6 +18,9 @@ public class ChargePointTemplate implements TemplateLoader {
     public static final String RC_ROWNHAMS = "RC Rownhams North";
     public static final String ASDA_CHARLTON = "Asda Charlton";
     public static final String ASDA_GREENHITHE = "Asda Greenhithe";
+    public static final String SAINSBURY_S_LEICESTER_NORTH_1 = "Sainsbury's Leicester North 1";
+    public static final String SAINSBURY_S_LEICESTER_NORTH_2 = "Sainsbury's Leicester North 2";
+    public static final String SAINSBURY_S_LEICESTER_NORTH_3 = "Sainsbury's Leicester North 3";
 
     @Override
     public void load() {
@@ -79,6 +82,24 @@ public class ChargePointTemplate implements TemplateLoader {
             add("chargeDeviceID", "9c20589c29266540045a9cbfdf12c64a");
             add("name", "Birkdale Primary School");
             add("location", new Point(53.631211,-3.005988));
+        }});
+
+        Fixture.of(ChargePoint.class).addTemplate(SAINSBURY_S_LEICESTER_NORTH_1, new Rule() {{
+            add("chargeDeviceID", "ba45dc26ae53e46ad94b491dc175ff05");
+            add("name", "Sainsbury's Leicester North 1");
+            add("location", new Point(52.668367,-1.104922));
+        }});
+
+        Fixture.of(ChargePoint.class).addTemplate(SAINSBURY_S_LEICESTER_NORTH_2, new Rule() {{
+            add("chargeDeviceID", "baa0ceb9d3bf8583d22479f67f86d67d");
+            add("name", "Sainsbury's Leicester North 2");
+            add("location", new Point(52.668422,-1.105023));
+        }});
+
+        Fixture.of(ChargePoint.class).addTemplate(SAINSBURY_S_LEICESTER_NORTH_3, new Rule() {{
+            add("chargeDeviceID", "a4a45de6c14b2b4581fe5ef1cbda2527");
+            add("name", "Sainsbury's Leicester North 3");
+            add("location", new Point(52.668471,-1.105109));
         }});
 
     }
